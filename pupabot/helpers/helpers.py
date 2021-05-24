@@ -1,14 +1,17 @@
-from pydantic import BaseModel
-from typing import Type, TypeVar
-
-Model = TypeVar("Model", bound=BaseModel)
+from typing import Union
 
 
-def load_model(t: Type[Model], o: dict) -> Model:
-    populated_keys = o.keys()
-    required_keys = set(t.schema()["required"])
-    missing_keys = required_keys.difference(populated_keys)
-    if missing_keys:
-        raise ValueError(f"Required keys missing: {missing_keys}")
-    all_definition_keys = t.schema()["properties"].keys()
-    return t(**{k: v for k, v in o.items() if k in all_definition_keys})
+SIZE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"]
+
+
+def get_readable_file_size(size_in_bytes: Union[int, float]) -> str:
+    if size_in_bytes is None:
+        return "0B"
+    index = 0
+    while size_in_bytes >= 1024:
+        size_in_bytes /= 1024
+        index += 1
+    try:
+        return f"{round(size_in_bytes, 2)}{SIZE_UNITS[index]}"
+    except IndexError:
+        return "File too large"

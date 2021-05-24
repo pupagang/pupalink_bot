@@ -6,7 +6,7 @@ class PupalinkService:
         return await self.pupa.search_book(book_name)
 
     async def download_book(self, book):
-        self.pupa.download_book(book)
+        await self.pupa.download_book(book)
 
     async def get_cover(book) -> str:
         return book.get_cover()

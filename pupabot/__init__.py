@@ -1,6 +1,7 @@
 from pyrogram import Client
 from loguru import logger
 from pupalink import Session
+
 from pyrogram.raw.types.bot_command import BotCommand
 from pyrogram.raw import functions
 from motor import motor_asyncio
@@ -8,7 +9,9 @@ from motor import motor_asyncio
 import yaml
 import sys
 
-from .service import SearchService
+from .service import SearchService, PupalinkService
+
+__version__ = "0.1.0"
 
 config = yaml.safe_load(open("config.yaml"))
 
@@ -32,6 +35,7 @@ session = Session(IDP_SESSION, proxy=PROXY)
 motor = motor_asyncio.AsyncIOMotorClient(MONGODB_URL)
 db = motor[MONGODB_DB]
 search_service = SearchService(db)
+pupa_service = PupalinkService(session)
 
 with bot:
     bot.send(

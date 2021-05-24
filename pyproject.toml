@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pupalink_bot"
+version = "0.1.0"
+description = "Pupalink-Bot which uses the pupalink library, for educational purposes"
+authors = ["billaids <jimmy.nelle@hsw-stud.de>"]
+license = "GPL-3.0 License"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pupalink = "^0.1.0-alpha.2"
+Pyrogram = "^1.2.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

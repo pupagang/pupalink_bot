@@ -1,0 +1,9 @@
+core:
+  api_id: "YOUR_API_ID"
+  api_hash: "YOUR_API_HASH"
+  owner_id: "YOUROWNERID"
+  bot_token: "YOURBOTTOKEN"
+  idp_session: "YOURSESSION"
+  proxy: "http://user:pass@some.proxy.com"
+  mongodb_url: "mongodb://localhost:27017" # Non docker service
+  mongodb_db: "search"

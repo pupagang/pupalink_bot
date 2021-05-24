@@ -1,6 +1,6 @@
 from pupabot.models.search import EntryModel
 
-from typing import List
+from typing import List, Optional
 
 
 class SearchService:
@@ -10,7 +10,7 @@ class SearchService:
     async def add(self, search: EntryModel) -> None:
         await self.collection.insert_one(search.dict())
 
-    async def search(self, name: str) -> List[dict]:
+    async def search(self, name: str) -> Optional[List[dict]]:
         result = await self.collection.find({"name": name}).sort("name")
 
         if result:

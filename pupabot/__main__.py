@@ -1,17 +1,13 @@
 import io
 
+from pupalink.metadata import Book
 from pyrogram import Client, filters
-from pyrogram.types import (
-    InlineQuery,
-    InlineQueryResult,
-    InlineQueryResultArticle,
-    InputTextMessageContent,
-    Message,
-)
+from pyrogram.types import (InlineQuery, InlineQueryResult,
+                            InlineQueryResultArticle, InputTextMessageContent,
+                            Message)
 
+from . import bot, messages, pupa_service, search_service
 from .helpers.helpers import get_readable_file_size
-
-from . import bot, search_service, pupa_service, messages
 
 
 @bot.on_message(filters.command("start"))
@@ -41,9 +37,10 @@ async def inline(client: Client, query: InlineQuery):
             results += (
                 InlineQueryResultArticle(
                     title=book.name,
-                    input_message_content=InputTextMessageContent(book.gen_dl_link()),
+                    input_message_content=InputTextMessageContent(
+                        book.info_link),
                     description=f"Authors: {authors}",
-                    thumb_url=book.get_cover(),
+                    thumb_url=book.get_cover(200, 200),
                 ),
             )
 
@@ -54,12 +51,16 @@ async def inline(client: Client, query: InlineQuery):
             pass
 
 
-@bot.on_message(filters.regex(r"https?://(?:link\.)?springer\.com/(?:content*.*)"))
+@bot.on_message(filters.regex(r"https?://link\.springer\.com/book/10.1007/(.+)"))
 async def book_link(client: Client, msg: Message):
     try:
-        print(msg.matches[0].group())
-        book = pupa_service.download_book(msg.matches[0].group())
+        isbn = msg.matches[0].group(1)
+        book = Book("", [], isbn)
+        print(book.download_link)
+        book = await pupa_service.download_book(book)
         bytes_io = io.BytesIO(book)
+        bytes_io.name = f"{isbn}.pdf"
+        await msg.reply_document(bytes_io)
     except Exception:
         await msg.reply("Not found")
         return

@@ -1,13 +1,12 @@
-from pyrogram import Client
-from loguru import logger
-from pupalink import Session
-
-from pyrogram.raw.types.bot_command import BotCommand
-from pyrogram.raw import functions
-from motor import motor_asyncio
+import sys
 
 import yaml
-import sys
+from loguru import logger
+from motor import motor_asyncio
+from pupalink import Session
+from pyrogram import Client
+from pyrogram.raw import functions
+from pyrogram.raw.types.bot_command import BotCommand
 
 from .service import SearchService, PupalinkService
 
@@ -36,20 +35,18 @@ motor = motor_asyncio.AsyncIOMotorClient(MONGODB_URL)
 db = motor[MONGODB_DB]
 search_service = SearchService(db)
 pupa_service = PupalinkService(session)
-
 with bot:
     bot.send(
         functions.bots.SetBotCommands(
             commands=[
-                BotCommand(command="start", description="Get the welcome message"),
-                BotCommand(command="help", description="How to use the bot"),
-                BotCommand(
-                    command="info",
-                    description="Get some useful information about the bot",
-                ),
-                BotCommand(
-                    command="stats", description="Get some statistics about the bot"
-                ),
-            ]
+                BotCommand(command="start",
+                           description="Get the welcome message"),
+                BotCommand(command="help",
+                           description="How to use the bot"),
+                BotCommand(command="info",
+                           description="Get some useful information about the bot"),
+                BotCommand(command="stats",
+                           description="Get some statistics about the bot"),
+            ]  # type: ignore
         )
     )

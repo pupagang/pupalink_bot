@@ -2,12 +2,15 @@ import io
 
 from pupalink.metadata import Book
 from pyrogram import Client, filters
-from pyrogram.types import (InlineQuery, InlineQueryResult,
-                            InlineQueryResultArticle, InputTextMessageContent,
-                            Message)
+from pyrogram.types import (
+    InlineQuery,
+    InlineQueryResult,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    Message,
+)
 
-from . import bot, messages, pupa_service, search_service
-from .helpers.helpers import get_readable_file_size
+from . import bot, messages, pupa_service
 
 
 @bot.on_message(filters.command("start"))
@@ -37,8 +40,7 @@ async def inline(client: Client, query: InlineQuery):
             results += (
                 InlineQueryResultArticle(
                     title=book.name,
-                    input_message_content=InputTextMessageContent(
-                        book.info_link),
+                    input_message_content=InputTextMessageContent(book.info_link),
                     description=f"Authors: {authors}",
                     thumb_url=book.get_cover(200, 200),
                 ),
@@ -56,7 +58,6 @@ async def book_link(client: Client, msg: Message):
     try:
         isbn = msg.matches[0].group(1)
         book = Book("", [], isbn)
-        print(book.download_link)
         book = await pupa_service.download_book(book)
         bytes_io = io.BytesIO(book)
         bytes_io.name = f"{isbn}.pdf"

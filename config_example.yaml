@@ -5,6 +5,4 @@ core:
   bot_token: "YOURBOTTOKEN"
   idp_session: "YOURSESSION"
   proxy: "http://user:pass@some.proxy.com"
-  mongodb_url: "mongodb://localhost:27017" # Non docker service
-  mongodb_db: "search"
   bot_name: "Pupalink-Bot"
